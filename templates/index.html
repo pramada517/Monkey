@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+  <form action="" method=GET class="form-horizontal">
+    <h2>List of Monkeys</h2>
+    <div class="panel panel-default">
+    	<!-- Default panel contents -->
+	  <table class="table">
+	      <tr>
+		<th>Name</th>
+                <th>Best Friend </th>
+                <th>No. of friends </th>
+	      {%- for m in monkey %}
+              <tr>
+               <td><a href="/monkey/view/{{ m.id }}">{{ m.name }}</a></td>
+               {%- if m.bestfriend_id %}
+                 {%- for n in monkey %}
+                   {%- if m.bestfriend_id == n.id %}
+                     <td>{{ n.name }}</td>
+                   {%- endif %}
+                 {%- endfor %}
+               {%- else %}
+                  <td> None </td>
+               {%- endif %}
+               <td>{{ m.friend.count()}}</td>
+      	      {%- endfor %}
+	  </table>
+    </div>
+    <a href="/add_monkey">Add Monkey</a>
+    </div>
+
+  </form>
+{% endblock %}

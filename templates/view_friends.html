@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+  <form action="" method=GET class="form-horizontal">
+    <div class="panel panel-default">
+    	<!-- Default panel contents -->
+        <div class="panel-heading">{{monkey.name}} Friends</div>
+	  <table class="table">
+	      <tr>
+	      {%- for friend in friends %}
+              <tr>
+               <td>{{ friend.monkey_name }}</td>
+      	      {%- endfor %}
+	  </table>
+         <div class="panel-footer">
+           <span class="pull-right">
+             <a href="/edit_friends/{{monkey.id}}" data-original-title="Edit monkey friends list" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i>  Edit  </a>
+           </span>
+         </div>
+  </form>
+{% endblock %}

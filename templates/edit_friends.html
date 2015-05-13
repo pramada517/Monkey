@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+  <form action="" method=GET class="form-horizontal">
+    <div class="panel panel-default">
+    	<!-- Default panel contents -->
+        <div class="panel-heading">{{monkey.name}} Friends</div>
+	  <table class="table">
+	      <tr>
+	      {%- for friend in friends %}
+              <tr>
+               <td>{{ friend.monkey_name }}</td>
+               <td> <span class="pull-right">
+                       <a href="/unfriend/{{monkey.id}}/{{friend.monkey_id}}" data-original-title="Update monkey friends list" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                    </span>
+               </td>
+      	      {%- endfor %}
+	  </table>
+          <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="Friend"> Add Friend
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+	      {%- for other in others %}
+                <li role="presentation"><a href="/befriend/{{monkey.id}}/{{other.id}}" role="menuitem" tabindex="-1">{{other.name}}</a></li>
+      	      {%- endfor %}
+            </ul>
+          </div>
+  </form>
+{% endblock %}
