@@ -26,7 +26,15 @@
 	  </table>
     </div>
     <a href="/add_monkey">Add Monkey</a>
-    </div>
-
+     {% if has_previous %}
+            <a href="/?page={{ previous_page }}" class="btn btn-primary">
+                &laquo;
+            </a>
+        {% endif %}
+        {% if has_next %}
+            <a href="/?page={{ next_page }}" class="btn btn-primary">
+                &raquo;
+            </a>
+        {% endif %}
   </form>
 {% endblock %}

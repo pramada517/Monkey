@@ -2,6 +2,7 @@ from os.path import abspath, dirname, join
 
 from flask import Flask, render_template, abort, session, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from math import ceil
 
 _cwd = dirname(abspath(__file__))
 
@@ -10,6 +11,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + join(_cwd, 'monkey.db')
 db = SQLAlchemy(app)
 SQLALCHEMY_ECHO = True
 DEBUG = True
+
+per_page = 5
 
 friends = db.Table('friends',
     db.Column('monkey_id', db.Integer, db.ForeignKey('monkey.id')),
@@ -157,8 +160,30 @@ def remove_monkey(val):
 
 @app.route('/')
 def index():
-    monkey = Monkey.query.all()
-    return render_template('index.html', monkey = monkey)
+    #monkey = Monkey.query.all()
+
+    try:
+        page = int(request.args.get('page', 1))
+    except ValueError:
+        page = 1
+
+    monkey = Monkey.query.limit(per_page).offset((page - 1) * per_page).all()
+    if not monkey and page != 1:
+        abort(404)
+
+    total = len(Monkey.query.all())
+    pages = int(ceil(total / float(per_page)))
+    has_next = pages > page
+    previous_page = page - 1
+    has_previous = page > 1
+    next_page = page + 1
+
+    return render_template('index.html',
+                           monkey = monkey,
+                           has_previous=has_previous,
+                           has_next=has_next,
+                           next_page=next_page,
+                           previous_page=previous_page)
  
 if __name__ == '__main__':
     db.create_all()
