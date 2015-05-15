@@ -33,7 +33,7 @@ class Monkey(db.Model):
                                lazy='dynamic')
 
     #bestfriends = db.relationship("Monkey", backref = db.backref('bestfriend', remote_side=id), lazy='dynamic') 
-    bestfriend = db.relationship('Monkey')
+    bestfriend = db.relationship('Monkey', uselist = False, remote_side = [id])
 
     def __init__(self, name, age, email, bestfriend_id):
         self.name = name
@@ -59,18 +59,15 @@ class Monkey(db.Model):
             friends.c.friend_id == monkey.id).count() > 0
 
     def are_bestfriends(self, monkey):
-        return self.best_friend == monkey
+        return self.bestfriend == monkey
 
     def be_bestfriend(self, monkey):
         if not self.are_bestfriends(monkey):
             self.bestfriend = monkey
-            monkey.bestfriend = self 
             return self
 
-    def unbestfriend(self, monkey):
-        if self.are_bestfriends(monkey):
+    def unbestfriend(self):
             self.bestfriend = None
-            monkey.bestfriend = None
             return self 
 
 @app.route('/befriend/<int:m_id>/<int:f_id>', methods = ['GET'])
@@ -115,7 +112,7 @@ def add_monkey():
         db.session.add(new_monkey)
         db.session.commit()
         monkey = Monkey.query.all()
-        return render_template('index.html', monkey = monkey)
+        return redirect(url_for('index'))
     elif request.method == 'GET':
         print "__add_monkey_get_method"
         return render_template('add_monkey.html')
@@ -131,15 +128,14 @@ def edit_monkey(val):
         bf_name = form["BestFriend"]
         bf = Monkey.query.filter_by(name=bf_name).first()
         if bf:
-          res.bestfriend_id = bf.id
+          res.be_bestfriend(bf)
         else:
-          res.bestfriend_id = 0
+          res.unbestfriend()
 
         db.session.commit()
 
         result = Monkey.query.all()
-        return render_template('index.html', monkey = result)
-
+        return redirect(url_for('index'))
     elif request.method == 'GET':
         result = Monkey.query.filter_by(id=val).first()
         result2 = db.session.query(Monkey).filter(Monkey.id != val)
@@ -155,13 +151,10 @@ def remove_monkey(val):
      res = Monkey.query.filter_by(id=val).first()
      db.session.delete(res)
      db.session.commit()
-     result = Monkey.query.all()
-     return render_template('index.html', monkey = result)
+     return redirect(url_for('index'))
 
 @app.route('/')
 def index():
-    #monkey = Monkey.query.all()
-
     try:
         page = int(request.args.get('page', 1))
     except ValueError:

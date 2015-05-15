@@ -12,15 +12,7 @@
 	      {%- for m in monkey %}
               <tr>
                <td><a href="/monkey/view/{{ m.id }}">{{ m.name }}</a></td>
-               {%- if m.bestfriend_id %}
-                 {%- for n in monkey %}
-                   {%- if m.bestfriend_id == n.id %}
-                     <td>{{ n.name }}</td>
-                   {%- endif %}
-                 {%- endfor %}
-               {%- else %}
-                  <td> None </td>
-               {%- endif %}
+               <td>{{m.bestfriend.name}} </td>
                <td>{{ m.friend.count()}}</td>
       	      {%- endfor %}
 	  </table>
