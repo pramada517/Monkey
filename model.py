@@ -12,8 +12,6 @@ db = SQLAlchemy(app)
 SQLALCHEMY_ECHO = True
 DEBUG = True
 
-per_page = 5
-
 friends = db.Table('friends',
     db.Column('monkey_id', db.Integer, db.ForeignKey('monkey.id')),
     db.Column('friend_id', db.Integer, db.ForeignKey('monkey.id'))
@@ -32,7 +30,6 @@ class Monkey(db.Model):
                                backref=db.backref('friends', lazy='dynamic'), 
                                lazy='dynamic')
 
-    #bestfriends = db.relationship("Monkey", backref = db.backref('bestfriend', remote_side=id), lazy='dynamic') 
     bestfriend = db.relationship('Monkey', uselist = False, remote_side = [id])
 
     def __init__(self, name, age, email, bestfriend_id):
@@ -114,7 +111,6 @@ def add_monkey():
         monkey = Monkey.query.all()
         return redirect(url_for('index'))
     elif request.method == 'GET':
-        print "__add_monkey_get_method"
         return render_template('add_monkey.html')
  
 @app.route('/monkey/edit/<int:val>', methods = ['GET', 'POST'])
@@ -133,7 +129,6 @@ def edit_monkey(val):
           res.unbestfriend()
 
         db.session.commit()
-
         result = Monkey.query.all()
         return redirect(url_for('index'))
     elif request.method == 'GET':
@@ -155,28 +150,9 @@ def remove_monkey(val):
 
 @app.route('/')
 def index():
-    try:
-        page = int(request.args.get('page', 1))
-    except ValueError:
-        page = 1
-
-    monkey = Monkey.query.limit(per_page).offset((page - 1) * per_page).all()
-    if not monkey and page != 1:
-        abort(404)
-
-    total = len(Monkey.query.all())
-    pages = int(ceil(total / float(per_page)))
-    has_next = pages > page
-    previous_page = page - 1
-    has_previous = page > 1
-    next_page = page + 1
-
+    monkey = Monkey.query.all()
     return render_template('index.html',
-                           monkey = monkey,
-                           has_previous=has_previous,
-                           has_next=has_next,
-                           next_page=next_page,
-                           previous_page=previous_page)
+                           monkey = monkey)
  
 if __name__ == '__main__':
     db.create_all()
