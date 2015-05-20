@@ -38,3 +38,14 @@ table.tablesorter thead tr th.headerSortDown {
 table.tablesorter thead tr th.headerSortDown, table.tablesorter thead tr th.headerSortUp {
 background-color: #8dbdd8;
 }
+.abc{
+    height:35px;
+      display:table-cell !important;
+      vertical-align:middle;
+}
+
+.panel-container {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    height:25px;
+}

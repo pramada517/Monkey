@@ -2,14 +2,19 @@
 {% block body %}
   <form action="" method=GET class="form-horizontal">
     <div class="container">
+     <div class = "span6 offset3">
       <div class="panel panel-info">
         <div class="panel-heading">
-              <h3 class="panel-title">{{monkey.name}}</h3>
-              <span class="pull-right">
+          <div class="container-fluid panel-container">
+           <div class="col-xs-6 text-left">
+              <h3 class="panel-title abc">{{monkey.name}}</h3>
+           </div>
+           <div class="col-xs-6 text-right">
               <h4> <a href="/view_friends/{{monkey.id}}">My Friends</a></h4>
+           </div>
+          </div>
         </div>
         <div class="panel-body">
-          <div class=" col-md-9 col-lg-9 "> 
             <table class="table table-user-information">
               <tbody>
                 <tr>
@@ -26,15 +31,17 @@
                 </tr>
                </tbody>
              </table> 
-           </div>
          </div>
          <div class="panel-footer">
+          <div class="container-fluid panel-container">
            <span class="pull-right">
              <a href="/monkey/edit/{{monkey.id}}" data-original-title="Edit this monkey" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i>  Edit  </a>
               <a href="/monkey/remove/{{monkey.id}}" data-original-title="Remove this monkey" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i>  Remove  </a>
            </span>
+          </div>
          </div>
       </div>
+     </div>
     </div>
   </form>
 {% endblock %}
