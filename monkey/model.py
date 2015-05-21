@@ -35,11 +35,15 @@ class Monkey(db.Model):
         if not self.is_friend(monkey):
             self.friend.append(monkey)
             return self
+        else:
+            return None
 
     def unfriend(self, monkey):
         if self.is_friend(monkey):
             self.friend.remove(monkey)
             return self
+        else:
+            return None
 
     def is_friend(self, monkey):
         return self.friend.filter(
@@ -51,9 +55,6 @@ class Monkey(db.Model):
     def be_bestfriend(self, monkey):
         if not self.are_bestfriends(monkey):
             self.bestfriend = monkey
-            return self
 
     def unbestfriend(self):
             self.bestfriend = None
-            return self 
- 

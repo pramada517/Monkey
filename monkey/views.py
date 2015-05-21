@@ -7,30 +7,33 @@ from monkey import app
 from monkey.model import Monkey
 from monkey.database import db
 
-@app.route('/befriend/<int:m_id>/<int:f_id>', methods = ['GET'])
-def befriend(m_id, f_id):
-     res = Monkey.query.filter_by(id=m_id).first()
-     res1 = Monkey.query.filter_by(id=f_id).first()
+@app.route('/edit_friends/<int:val>', methods = ['POST'])
+def friend(val):
+     form = request.form
+     friend_name = form["AddFriend"]
+     res = Monkey.query.filter_by(id=val).first()
+     res1 = Monkey.query.filter_by(name=friend_name).first()
      r = res.befriend(res1)
-     db.session.add(r)
-     db.session.commit()
-     return redirect(url_for('index'))
+     if r:
+         db.session.add(r)
+         db.session.commit()
+     return redirect(url_for('edit_friends', val=val))
 
 @app.route('/unfriend/<int:m_id>/<int:f_id>', methods = ['GET'])
 def unfriend(m_id, f_id):
      res = Monkey.query.filter_by(id=m_id).first()
      res1 = Monkey.query.filter_by(id=f_id).first()
      r = res.unfriend(res1)
-     db.session.add(r)
-     db.session.commit()
-     return redirect(url_for('index'))
+     if r:
+         db.session.add(r)
+         db.session.commit()
+     return redirect(url_for('edit_friends', val=m_id))
 
 @app.route('/edit_friends/<int:val>', methods = ['GET'])
 def edit_friends(val):
      res = Monkey.query.filter_by(id=val).first()
      res1 = db.session.execute(res.friend).fetchall()
      res2 = db.session.query(Monkey).filter(Monkey.id != val).all()
-     print "%s" % res2
      return render_template('edit_friends.html',
                                  monkey = res, friends = res1, others = res2)
 

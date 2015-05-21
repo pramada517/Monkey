@@ -16,16 +16,21 @@
                </td>
       	      {%- endfor %}
 	  </table>
-          <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="Friend"> Add Friend
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-	      {%- for other in others %}
-                <li role="presentation"><a href="/befriend/{{monkey.id}}/{{other.id}}" role="menuitem" tabindex="-1">{{other.name}}</a></li>
-      	      {%- endfor %}
-            </ul>
-          </div>
-     </div>
+       </div>
+    </div>
   </form>
+  <div class = "span6 offset3">
+    <form id="bootstrapSelectForm" method="post" class="form-inline">
+      <div class="form-group">
+         <select name="AddFriend" class="form-control" id="AddFriend">
+           {%- for other in others %}
+              <option>{{other.name}}</option>
+           {%- endfor %}
+          </select>
+       </div>
+      <div class="form-group">
+         <button type="submit" class="btn btn-primary" id="AddFriend">Add Friend</button>
+      </div>
+   </form>
+  </div>
 {% endblock %}
