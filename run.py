@@ -1,6 +1,7 @@
 #!flask/bin/python
-from monkey import create_app
+from monkey import app
+from monkey.database import init_db
 
-app = create_app()
+init_db()
 app.run(debug=False)
 
