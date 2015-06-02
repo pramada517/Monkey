@@ -1,10 +1,9 @@
-from os.path import abspath, dirname, join
+import os
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-_cwd = dirname(abspath(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + join(_cwd, 'monkey.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite://')
 
 from monkey.model import Monkey
 from monkey.views import *
